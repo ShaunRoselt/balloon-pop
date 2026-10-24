@@ -6,7 +6,7 @@ let steam=null,win;
 app.whenReady().then(()=>{
  const id=Number(process.env.STEAM_APP_ID||config.appId);
  if(Number.isInteger(id)&&id>0){try{steam=require('steamworks.js').init(id)}catch(e){console.warn('Steam unavailable:',e.message)}}
- win=new BrowserWindow({fullscreen:true,autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
+ win=new BrowserWindow({fullscreen:true,icon:path.join(__dirname,'web/assets/icon-512.png'),autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
  win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
  win.webContents.on('will-navigate',(event,url)=>{if(!url.startsWith('file://'))event.preventDefault()});
  win.loadFile(path.join(__dirname,'web/index.html'));
