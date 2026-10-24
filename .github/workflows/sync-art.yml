@@ -1,0 +1,32 @@
+name: Sync illustrated achievement assets
+on:
+  push:
+    paths: ['.github/workflows/sync-art.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch published artwork
+        run: |
+          python3 - <<'PY'
+          import json,urllib.request,pathlib
+          root=pathlib.Path('dist')
+          names=['assets/atlas.png','assets/play-balloon.png']
+          for d in json.loads((root/'achievement-definitions.json').read_text()):
+              names.extend(['assets/achievements/'+d['id']+'.png','assets/achievements/'+d['id']+'-locked.png'])
+          for name in names:
+              p=root/name;p.parent.mkdir(parents=True,exist_ok=True)
+              with urllib.request.urlopen('https://balloon-pop-play.shaunroselt.chatgpt.site/'+name) as response:
+                  p.write_bytes(response.read())
+          PY
+      - name: Commit artwork
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/assets
+          git diff --cached --quiet || git commit -m "Add 68 unique ImageGen achievement illustrations and restore smooth game art"
+          git push
