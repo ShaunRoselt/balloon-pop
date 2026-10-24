@@ -1,0 +1,1 @@
+const fs=require('node:fs'),path=require('node:path');const target=path.join(__dirname,'web');fs.rmSync(target,{recursive:true,force:true});fs.cpSync(path.join(__dirname,'../dist'),target,{recursive:true,filter:p=>!p.includes('/releases')&&!p.includes('/download')});

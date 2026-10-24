@@ -1,0 +1,68 @@
+name: Desktop release
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tests/achievements.cjs
+      - run: npm ci
+        working-directory: desktop
+      - run: npm run prepare:web
+        working-directory: desktop
+      - if: runner.os == 'Windows'
+        run: npx electron-builder --win portable --x64
+        working-directory: desktop
+      - if: runner.os == 'macOS'
+        run: npx electron-builder --mac zip --x64 --arm64
+        working-directory: desktop
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+      - if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user --noninteractive --no-related --no-deps flathub org.freedesktop.Platform//25.08 org.electronjs.Electron2.BaseApp//25.08
+          cd desktop
+          npx electron-builder --linux AppImage --x64
+          bash build-flatpak.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ runner.os }}
+          path: |
+            desktop/release/*.exe
+            desktop/release/*.AppImage
+            desktop/release/*.flatpak
+            desktop/release/*macOS*.zip
+          if-no-files-found: error
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+      - run: |
+          python3 -m pip install pillow
+          python3 scripts/export-steam-icons.py
+          cp dist/releases/steam-achievement-icons.zip release-assets/
+          cd release-assets
+          sha256sum * > SHA256SUMS.txt
+      - run: |
+          version=$(node -p "require('./desktop/package.json').version")
+          gh release create "v$version" release-assets/* --target "$GITHUB_SHA" --title "Balloon Pop $version" --notes-file desktop/RELEASE_NOTES.md
+        env:
+          GH_TOKEN: ${{ github.token }}

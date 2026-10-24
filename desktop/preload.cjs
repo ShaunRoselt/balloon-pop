@@ -1,0 +1,1 @@
+const {contextBridge,ipcRenderer}=require('electron');contextBridge.exposeInMainWorld('balloonDesktop',{quit:()=>ipcRenderer.send('game:quit'),syncAchievements:ids=>ipcRenderer.invoke('achievements:sync',ids)});

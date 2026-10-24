@@ -1,0 +1,64 @@
+{
+  "name": "balloon-pop-desktop",
+  "version": "0.2.0",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "prepare:web": "node prepare.cjs",
+    "build:windows": "npm run prepare:web && electron-builder --win portable --x64",
+    "build:linux": "npm run prepare:web && electron-builder --linux AppImage flatpak --x64",
+    "build:mac": "npm run prepare:web && electron-builder --mac zip --x64 --arm64"
+  },
+  "dependencies": {
+    "steamworks.js": "^0.4.0"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "group.roselt.BalloonPop",
+    "productName": "Balloon Pop",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "steam.json",
+      "web/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/steamworks.js/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "artifactName": "Balloon-Pop-${version}-Windows-${arch}.${ext}",
+      "icon": "icons/icon.ico"
+    },
+    "linux": {
+      "category": "Game",
+      "target": [
+        "AppImage",
+        "flatpak"
+      ],
+      "artifactName": "Balloon-Pop-${version}-Linux-x86_64.${ext}",
+      "icon": "icons/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "compression": "maximum",
+    "mac": {
+      "target": "zip",
+      "icon": "icons/icon.icns",
+      "identity": null,
+      "category": "public.app-category.education",
+      "artifactName": "Balloon-Pop-${version}-macOS-${arch}.${ext}"
+    }
+  },
+  "description": "Balloon popping learning game for little hands",
+  "author": "Roselt Group"
+}
