@@ -21,7 +21,7 @@
 - Small-phone retest verified 1 → 2, then changed the embedded viewport to 568×320; six balloons and the current target 2 were preserved.
 
 ## Automated checks
-Run `node --test tests/game.test.cjs` (14 tests).
+Run `node --test tests/game.test.cjs` (19 tests), plus `node tests/achievements.cjs`.
 The test harness runs actual game JavaScript with a minimal fake DOM, audio and speech adapters; it verifies logic, not rendered browser behavior or audible output.
 - Every mode launches with valid target/decorative state.
 - Counting wraps 20 → 1; uppercase/lowercase wrap Z/z → A/a.
@@ -39,7 +39,7 @@ The test harness runs actual game JavaScript with a minimal fake DOM, audio and 
 - Learning-target stacking above decorative balloons.
 
 ## Remaining verification limits
-No physical multitouch device or iOS/Safari/Firefox testing. Speech dispatch and audio logic checked, but pronunciation, sound balance and device-specific vibration were not listened to or measured. Android animation/audio parity remains unverified. Browser speech depends on installed voices; phonics and original animal surprises are not implemented. Offline installation/caching is not implemented.
+No physical multitouch device or iOS/Safari/Firefox testing. Speech dispatch and audio logic checked, but pronunciation, sound balance and device-specific vibration were not listened to or measured. Android animation/audio parity remains unverified. Browser speech depends on installed voices; phonics and original animal surprises are not implemented. Offline/PWA caching has since been implemented; see the release verification below.
 
 ## Suggested next work
 1. Consistent recorded learning voices (and real phonics), replacing reliance on browser speech.
@@ -63,3 +63,15 @@ No physical multitouch device or iOS/Safari/Firefox testing. Speech dispatch and
 - Language moved from the mode picker into the parent-protected settings dropdown; Spanish selection persisted after reload. Test browser restored to English afterward.
 - Exit now requires a fresh parent-lock answer before exit confirmation. Browser verified wrong/correct answers and cancellation.
 - Automated suite: 19 passing checks, including correct-parent-answer routing for Exit and two-level back navigation.
+
+## Version 0.2.0 release verification
+
+- All five desktop files and the Steam image ZIP downloaded from the public release and match SHA256SUMS.txt, including the Apple Silicon ZIP that previously timed out.
+- Both macOS ZIPs pass CRC integrity checks. Their packaged app.asar contains the 68 achievement definitions matching the Steam allowlist, the balloon artwork and app icon, the isolated preload, and fullscreen startup configuration. Native Steam modules are included outside asar.
+- The achievement ZIP passes integrity checks and contains 68 color plus 68 locked PNGs. These use four ImageGen illustration families.
+- GitHub Actions built Windows x64, Linux x86_64 AppImage and Flatpak, and macOS x64/arm64 successfully in run 40093714062.
+- The published browser game was checked for the 68-item achievement list, filters, and actual unlocks after starting Normal and popping a balloon.
+- Playtime milestones pause while hidden or showing a modal and count active play across visits.
+- No signed/notarized desktop distribution, physical touchscreen tests, full native OS playtests, or live Steam integration tests have been completed. Steam verification requires the real App ID and published API definitions.
+
+The Linux npm build command now follows the same AppImage-plus-custom-Flatpak sequence used by the successful release workflow.

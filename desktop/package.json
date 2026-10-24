@@ -7,7 +7,7 @@
     "start": "electron .",
     "prepare:web": "node prepare.cjs",
     "build:windows": "npm run prepare:web && electron-builder --win portable --x64",
-    "build:linux": "npm run prepare:web && electron-builder --linux AppImage flatpak --x64",
+    "build:linux": "npm run prepare:web && electron-builder --linux AppImage --x64 && bash build-flatpak.sh",
     "build:mac": "npm run prepare:web && electron-builder --mac zip --x64 --arm64"
   },
   "dependencies": {
