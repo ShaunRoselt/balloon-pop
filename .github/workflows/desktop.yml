@@ -20,6 +20,13 @@ jobs:
         working-directory: desktop
       - run: npm run prepare:web
         working-directory: desktop
+      - run: |
+          node --test tests/game.test.cjs
+          node tests/cloud.cjs
+          node tests/controller.cjs
+          node tests/desktop-steam.cjs
+          node tests/desktop-voices.cjs
+          node tests/offline.cjs
       - if: runner.os == 'Windows'
         run: npx electron-builder --win portable --x64
         working-directory: desktop
@@ -37,6 +44,7 @@ jobs:
           cd desktop
           npx electron-builder --linux AppImage --x64
           bash build-flatpak.sh
+          tar -czf "release/Balloon-Pop-$(node -p "require('./package.json').version")-Steam-Linux-x64.tar.gz" -C release/linux-unpacked .
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-${{ runner.os }}
@@ -44,6 +52,7 @@ jobs:
             desktop/release/*.exe
             desktop/release/*.AppImage
             desktop/release/*.flatpak
+            desktop/release/*Steam-Linux*.tar.gz
             desktop/release/*macOS*.zip
           if-no-files-found: error
   release:

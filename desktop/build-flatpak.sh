@@ -22,7 +22,7 @@ command=balloon-pop
 [Context]
 shared=ipc;
 sockets=x11;wayland;pulseaudio;
-devices=dri;
+devices=dri;input;
 META
 cat > "$stage_dir/export/share/applications/group.roselt.BalloonPop.desktop" <<'DESKTOP'
 [Desktop Entry]

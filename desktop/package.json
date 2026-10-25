@@ -1,6 +1,6 @@
 {
   "name": "balloon-pop-desktop",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "main": "main.cjs",
   "scripts": {
@@ -11,7 +11,7 @@
     "build:mac": "npm run prepare:web && electron-builder --mac zip --x64 --arm64"
   },
   "dependencies": {
-    "steamworks.js": "^0.4.0"
+    "steamworks.js": "0.4.0"
   },
   "devDependencies": {
     "electron": "^38.0.0",
@@ -26,6 +26,7 @@
     "files": [
       "main.cjs",
       "preload.cjs",
+      "save-store.cjs",
       "steam.json",
       "web/**/*"
     ],
@@ -57,7 +58,8 @@
       "identity": null,
       "category": "public.app-category.education",
       "artifactName": "Balloon-Pop-${version}-macOS-${arch}.${ext}"
-    }
+    },
+    "afterPack": "./after-pack.cjs"
   },
   "description": "Balloon popping learning game for little hands",
   "author": "Roselt Group"
