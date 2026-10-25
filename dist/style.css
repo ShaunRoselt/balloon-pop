@@ -40,3 +40,5 @@ html{color-scheme:only light!important}body{color:#173c53}nav button svg{width:4
 /* Center symbols on the inflated body, excluding the knot and string. */
 .balloon .label{top:39%;left:50%;width:72%;transform:translate(-50%,-50%);display:grid;place-items:center;line-height:1;text-align:center}
 .cloud{clip-path:none;background-image:url('assets/cloud.png');background-size:contain;background-position:center!important;background-repeat:no-repeat}
+
+.range-control{display:block;position:relative;margin-top:26px}.range-hint{position:absolute;bottom:calc(100% - 3px);transform:translateX(-50%);white-space:nowrap;pointer-events:none;z-index:2;padding:5px 9px;border:2px solid #578493;border-radius:8px;background:#f6fcff url('assets/controls/light.png');color:#234451!important;-webkit-text-fill-color:#234451!important;text-shadow:none;font-size:16px;font-weight:bold}.range-hint[hidden]{display:none}.sliders label{min-width:0}
