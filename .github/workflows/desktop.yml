@@ -22,6 +22,8 @@ jobs:
         working-directory: desktop
       - run: |
           node --test tests/game.test.cjs
+          node tests/steam-sync.cjs
+          node tests/packaging.cjs
           node tests/cloud.cjs
           node tests/controller.cjs
           node tests/desktop-steam.cjs
