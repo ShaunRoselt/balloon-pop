@@ -21,3 +21,10 @@ ipcMain.handle('achievements:sync',(event,ids)=>{
 app.on('window-all-closed',()=>app.quit());
 
 ipcMain.on('game:quit',event=>{if(event.sender===win?.webContents)app.quit()});
+
+ipcMain.handle('voice:read',async(event,lang)=>{
+ if(event.sender!==win?.webContents||typeof lang!=='string'||!/^[a-z]{2}-[A-Z]{2}$/.test(lang))throw Error('Invalid voice request');
+ const voices=require('./web/voice-manifest.json');if(!Object.hasOwn(voices,lang))throw Error('Unknown voice');
+ const bytes=await require('node:fs/promises').readFile(path.join(__dirname,'web/assets/voices',lang+'.mp3'));
+ return new Uint8Array(bytes);
+});
