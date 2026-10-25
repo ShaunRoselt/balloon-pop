@@ -1,11 +1,9 @@
 # Balloon Pop desktop
 
-The Electron edition bundles the web game for offline play and launches fullscreen. It uses an isolated renderer and a narrow IPC bridge for achievements and parent-gated quit.
+Electron launches the bundled game fullscreen. Version 0.3.0 includes 31 offline learning voice packs and unique illustrations for 68 achievements. The renderer uses an isolated preload bridge to read only known voice locales from local files. No browser speech voice or network TTS service is required.
 
-Use Node.js 22+, then `npm ci` and `npm run prepare:web`. Run `npm start` for development. On Windows run `npm run build:windows`; on macOS run `npm run build:mac` for Intel and Apple Silicon ZIPs. On Linux run `npx electron-builder --linux AppImage --x64`, then `bash build-flatpak.sh` after installing the Electron2 BaseApp and Freedesktop 25.08 runtime from Flathub. The GitHub Desktop release workflow performs these builds and publishes them to this repository's Releases.
+Use Node.js 22+, then `npm ci` and `npm run prepare:web`. Use `npm start` for development. Build using `npm run build:windows`, `npm run build:linux` or `npm run build:mac` on the relevant platform. Linux's custom Flatpak export requires the Electron2 BaseApp and Freedesktop runtime 25.08. The Desktop release GitHub workflow builds Windows portable EXE, Linux AppImage/Flatpak and macOS Intel/Apple Silicon ZIPs.
 
-Windows is a portable EXE. Windows and macOS builds are unsigned; macOS builds are not notarized. Target-system playtesting is still needed; successful packaging is not a complete operating-system compatibility test.
+Windows and macOS builds are unsigned; macOS builds are not notarized. Real-device listening and pronunciation review remain necessary. Offline byte loading, cue bounds and interruption are covered by the checks in tests/voices.cjs and tests/desktop-voices.cjs.
 
-Steam: set the real `appId` in `steam.json` or STEAM_APP_ID for development. Create and publish all 68 achievement API names listed in that file in Steamworks. Export their color and locked images with `python3 scripts/export-steam-icons.py` from the repository root. Test with Steam running under an entitled account. The app retries locally unlocked achievements at launch and on new unlocks. No placeholder App ID is used. Browser/PWA and Electron progress use separate storage profiles.
-
-Steam overlay and entitlement behavior require verification once the actual App ID is assigned. The renderer has no general Node.js or Steam access. Flatpak uses zypak and normal application sandboxing; the export script disables only the build-time icon-validator sandbox.
+Set the actual Steam App ID in steam.json when assigned, create the 68 achievement API names listed there in Steamworks, publish them, then test with an entitled Steam account. Without an App ID, achievements work locally. Browser/PWA and Electron have separate local progress storage.

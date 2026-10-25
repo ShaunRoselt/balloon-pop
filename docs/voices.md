@@ -9,3 +9,5 @@ Chrome uses Web Audio to decode and play the same MP3 files as Electron. No inst
 Audio is stopped on mute, language change, exit, hidden page and parent/achievement dialogs. A subsequent pop interrupts the prior prompt.
 
 Generated speech uses eSpeak NG; source and license: https://github.com/espeak-ng/espeak-ng . No eSpeak executable or library is shipped in the application.
+
+Verification: all 31 packs decode with ffmpeg; every cue lies inside its audio file. Unit checks exercise interrupted playback and locale selection. The Electron reader test loads every locale with network unavailable and checks invalid locale/sender rejection. A service-worker test verifies voice cache coverage and simulated network-failure fallback. Full native-device listening has not been performed.
