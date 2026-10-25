@@ -36,3 +36,7 @@ html{color-scheme:only light!important}body{color:#173c53}nav button svg{width:4
 /* Keep selected filters readable even with browser darkening overrides. */
 .achievement-filters button[aria-pressed=true]{color:#173c53!important;-webkit-text-fill-color:#173c53!important;background-color:#d9f4ff!important;background-image:url('assets/controls/light.png')!important;border:3px solid #276b83;font-weight:700;text-shadow:none!important}
 #game[data-screen="play"] #achievements{display:none!important}
+
+/* Center symbols on the inflated body, excluding the knot and string. */
+.balloon .label{top:39%;left:50%;width:72%;transform:translate(-50%,-50%);display:grid;place-items:center;line-height:1;text-align:center}
+.cloud{clip-path:none;background-image:url('assets/cloud.png');background-size:contain;background-position:center!important;background-repeat:no-repeat}

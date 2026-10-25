@@ -34,7 +34,7 @@ function popNearby(e){const rect=game.getBoundingClientRect(),x=e.clientX-rect.l
 game.addEventListener('contextmenu',e=>e.preventDefault());
 
 let transitioning=false;
-function chooseBalloon(button,next){if(transitioning)return;enterFullscreen();transitioning=true;menu.classList.add('transitioning');button.disabled=true;button.classList.add('chosen');tone(420,.15,'triangle',.08);const r=button.getBoundingClientRect(),g=game.getBoundingClientRect();burst(r.left+r.width/2-g.left,r.top+r.height*.35-g.top);setTimeout(()=>{next();transitioning=false;menu.classList.remove('transitioning')},opt.calm||matchMedia('(prefers-reduced-motion: reduce)').matches?100:260)}
+function chooseBalloon(button,next){if(transitioning)return;enterFullscreen();transitioning=true;menu.classList.add('transitioning');button.disabled=true;button.classList.add('chosen');balloonPopSound();const r=button.getBoundingClientRect(),g=game.getBoundingClientRect();burst(r.left+r.width/2-g.left,r.top+r.height*.35-g.top);setTimeout(()=>{next();transitioning=false;menu.classList.remove('transitioning')},opt.calm||matchMedia('(prefers-reduced-motion: reduce)').matches?100:260)}
 function positionBalloon(b){b.el.style.transform=`translate(${Math.max(4,Math.min(game.clientWidth-b.w-4,b.x+Math.sin(elapsed+b.phase)*12))}px,${b.y}px) rotate(${opt.calm?0:Math.sin(elapsed+b.phase)*4}deg)`}
 function burst(x,y){for(let i=0;i<(opt.calm?4:12);i++){const p=document.createElement('span');p.className='spark';p.textContent=['◆','●','▪'][i%3];p.style.cssText=`left:${x}px;top:${y}px;color:${['#fff574','#ff7aa7','#a5f7ff','#81dc58','#b875ed'][i%5]};--dx:${(Math.random()-.5)*180}px;--dy:${(Math.random()-.5)*180}px`;$('#particles').append(p);setTimeout(()=>p.remove(),700)}}
 
